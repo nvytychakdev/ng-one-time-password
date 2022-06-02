@@ -1,0 +1,26 @@
+<div class="playground">
+  <div class="playground--controls">
+    One Time password
+    <div class="playground--controls-wrapper">
+      <select [(ngModel)]="pwdType">
+        <option value="text">Text</option>
+        <option value="password">Password</option>
+        <option value="number">Number</option>
+      </select>
+      <input
+        type="text"
+        [(ngModel)]="pwdLength"
+        placeholder="password length"
+        type="number"
+      />
+    </div>
+  </div>
+  <div class="playground--item">
+    <ng-one-time-password
+      [(ngModel)]="value"
+      [type]="pwdType"
+      [length]="pwdLength"
+      (ngModelChange)="onValueChange($event)"
+    ></ng-one-time-password>
+  </div>
+</div>
