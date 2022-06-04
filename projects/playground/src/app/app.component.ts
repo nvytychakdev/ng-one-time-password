@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { OneTimePasswordType } from '@ng-one-time-password/models';
 
 @Component({
@@ -7,11 +8,14 @@ import { OneTimePasswordType } from '@ng-one-time-password/models';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  value = '';
+  control = new FormControl();
   pwdLength = 6;
   pwdType = OneTimePasswordType.TEXT;
+  isMasked = false;
 
-  onValueChange(value: string): void {
-    console.log(value);
+  constructor() {
+    this.control.valueChanges.subscribe((value) => {
+      console.log(value);
+    });
   }
 }
