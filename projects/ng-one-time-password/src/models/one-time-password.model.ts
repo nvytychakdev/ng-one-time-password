@@ -9,6 +9,5 @@
  */
 export enum OneTimePasswordType {
   TEXT = 'text',
-  PASSWORD = 'password',
   NUMBER = 'number',
 }
