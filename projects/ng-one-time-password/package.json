@@ -1,6 +1,12 @@
 {
-  "name": "ng-one-time-password",
+  "name": "@nvytychakdev/ng-one-time-password",
   "version": "0.0.1",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "url": "https://github.com/nvytychakdev/ng-one-time-password.git"
+  },
   "peerDependencies": {
     "@angular/common": "^13.3.0",
     "@angular/core": "^13.3.0"
