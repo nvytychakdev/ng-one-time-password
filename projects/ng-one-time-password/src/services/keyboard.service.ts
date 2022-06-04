@@ -24,11 +24,12 @@ export class KeyboardService {
    * In case of Delete and Backspace buttons, if there was no value on input during delete event
    * default behavior is going to be prevented, and focus will be turned to a previous sibling.
    *
-   * @param event
+   * @param event - keyboard event
+   * @param type - one time password type
    *
    * @public
    */
-  handleKeyPress(event: KeyboardEvent): void {
+  handleKeyPress(event: KeyboardEvent, type: OneTimePasswordType): void {
     if (!(event.target instanceof HTMLInputElement)) {
       return;
     }
@@ -59,6 +60,16 @@ export class KeyboardService {
       !event.ctrlKey
     ) {
       event.target.value = '';
+    }
+
+    // validate target input with numeric value
+    // in case if string value is provided - value should be cleared completely
+    // prevent triggering input changes event for numeric field with E key
+    if (type === OneTimePasswordType.NUMBER && /(e|E)/.test(event.key)) {
+      event.target.value = '';
+      event.preventDefault();
+      event.stopPropagation();
+      return;
     }
   }
 }

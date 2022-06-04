@@ -161,6 +161,7 @@
           "builder": "@storybook/angular:start-storybook",
           "options": {
             "browserTarget": "ng-one-time-password:build",
+            "host": "0.0.0.0",
             "port": 6006
           }
         },
