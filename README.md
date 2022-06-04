@@ -1,5 +1,7 @@
 # NgOneTimePassword
 
+[Storybook Demo](https://nvytychakdev.github.io/ng-one-time-password/)
+
 ## Installation
 
 To install the package simply run:
