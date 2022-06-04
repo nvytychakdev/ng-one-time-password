@@ -20,6 +20,7 @@ jobs:
           scope: "@nvytychakdev"
       - run: npm ci
       - run: npm run build ng-one-time-password
+      - run: cp .npmrc ./dist/ng-one-time-password/
       - run: cd ./dist/ng-one-time-password
       - run: npm publish
         env:
