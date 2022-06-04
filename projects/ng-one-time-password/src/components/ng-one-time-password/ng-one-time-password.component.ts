@@ -1,13 +1,16 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   forwardRef,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { AbstractControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
@@ -45,7 +48,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class NgOneTimePasswordComponent
   extends ValueControl<string>
-  implements OnInit, OnChanges, OnDestroy
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy
 {
   /**
    * One-Time-Password controls length input.
@@ -86,6 +89,19 @@ export class NgOneTimePasswordComponent
    * @public
    */
   @Input() type: OneTimePasswordType = OneTimePasswordType.TEXT;
+
+  /**
+   * One-Time-Password first input focus on init.
+   * 
+   * Used to set document focus for first otp input once form control is available.
+   * Might be helpful on page load to focus input right away. 
+   * 
+   * @default false
+   * @public 
+   */
+  @Input() focusOnInit = false;
+
+  @ViewChild('controlsWrapper', { static: false }) controlsWrapper!: ElementRef;
 
   /**
    * Form controls group.
@@ -147,8 +163,7 @@ export class NgOneTimePasswordComponent
   constructor(
     private _otp: OneTimePasswordService,
     private _keyboard: KeyboardService,
-    private _input: InputService,
-    private _cdr: ChangeDetectorRef
+    private _input: InputService
   ) {
     super();
   }
@@ -186,6 +201,21 @@ export class NgOneTimePasswordComponent
       !pwdLength.firstChange
     ) {
       this._setupControls();
+    }
+  }
+
+  /**
+   * Component view init.
+   * 
+   * Once all input elements is available on the view - after view init hook is used to provide
+   * first input focus based on `focusOnInit` state of the component.
+   * 
+   * @public
+   */
+  ngAfterViewInit(): void {
+    const wrapper = this.controlsWrapper?.nativeElement;
+    if(this.focusOnInit && wrapper instanceof HTMLElement) {
+      this._input.focusInput(wrapper.firstChild);
     }
   }
 
