@@ -20,9 +20,6 @@ jobs:
           scope: "@nvytychakdev"
       - run: npm ci
       - run: npm run build ng-one-time-password
-      - name: Authenticate with the GitHub Package Registry
-        run: echo "//npm.pkg.github.com:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
-      - run: cd ./dist/ng-one-time-password
-      - run: npm publish --@nvytychakdev:registry=https://npm.pkg.github.com/
+      - run: cd dist/ng-one-time-password && npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

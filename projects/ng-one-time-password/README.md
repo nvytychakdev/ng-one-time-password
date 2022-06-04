@@ -1,5 +1,7 @@
 # NgOneTimePassword
 
+![chrome-capture-2022-5-4](https://user-images.githubusercontent.com/25505898/171997018-741ca0cf-b1ca-4b71-ae4d-b1412bcf7cf3.gif)
+
 [Storybook Demo](https://nvytychakdev.github.io/ng-one-time-password/)
 
 ## Installation
