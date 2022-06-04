@@ -9,6 +9,7 @@
  */
 export enum InputEventType {
   INSERT_TEXT = 'insertText',
+  DELETE_CONTENT_FORWARD = 'deleteContentForward',
   DELETE_CONTENT_BACKWARD = 'deleteContentBackward',
 }
 

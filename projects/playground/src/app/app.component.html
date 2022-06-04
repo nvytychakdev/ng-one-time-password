@@ -4,7 +4,6 @@
     <div class="playground--controls-wrapper">
       <select [(ngModel)]="pwdType">
         <option value="text">Text</option>
-        <option value="password">Password</option>
         <option value="number">Number</option>
       </select>
       <input
@@ -13,14 +12,23 @@
         placeholder="password length"
         type="number"
       />
+      <div>
+        <input
+          type="checkbox"
+          name="masked"
+          id="masked"
+          [(ngModel)]="isMasked"
+        />
+        <label for="masked">Masked</label>
+      </div>
     </div>
   </div>
   <div class="playground--item">
     <ng-one-time-password
-      [(ngModel)]="value"
+      [formControl]="control"
       [type]="pwdType"
       [length]="pwdLength"
-      (ngModelChange)="onValueChange($event)"
+      [masked]="isMasked"
     ></ng-one-time-password>
   </div>
 </div>

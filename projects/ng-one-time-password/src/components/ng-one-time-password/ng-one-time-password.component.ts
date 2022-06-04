@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
+  InputEventType,
   InputType,
   OneTimePasswordType,
   ValueControl
@@ -47,8 +48,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class NgOneTimePasswordComponent
   extends ValueControl<string>
-  implements OnInit, OnChanges, AfterViewInit, OnDestroy
-{
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   /**
    * One-Time-Password controls length input.
    *
@@ -69,7 +69,7 @@ export class NgOneTimePasswordComponent
    *
    * Used to specify expected type of the input from user.
    *
-   * Possible values: `'text'`, `'password'`, `'number'`.
+   * Possible values: `'text'`, `'number'`.
    *
    *
    * @example 
@@ -186,8 +186,7 @@ export class NgOneTimePasswordComponent
    * @public
    */
   get inputType(): InputType {
-    const type = this.type === OneTimePasswordType.NUMBER ? InputType.NUMBER : InputType.TEXT;
-    return this.masked ? InputType.PASSWORD : type;
+    return this.masked ? InputType.PASSWORD : InputType.TEXT;
   }
 
   /**
@@ -262,7 +261,7 @@ export class NgOneTimePasswordComponent
    */
   ngAfterViewInit(): void {
     const wrapper = this.controlsWrapper?.nativeElement;
-    if(this.focusOnInit && wrapper instanceof HTMLElement) {
+    if (this.focusOnInit && wrapper instanceof HTMLElement) {
       this._input.focusInput(wrapper.firstChild);
     }
   }
@@ -308,7 +307,42 @@ export class NgOneTimePasswordComponent
    * @param event - keyboard event
    */
   onInputKeyDown(event: KeyboardEvent): void {
-    this._keyboard.handleKeyPress(event, this.type);
+    this._keyboard.handleKeyPress(event);
+  }
+
+  /**
+   * Before input change event.
+   * 
+   * Fired after user clicked any button but before input actually got changed.
+   * This method used to prevent entering invalid values based on `type` of the one time passwprd 
+   * and delete any input value with backward/forward removal events, which is fired with backspace and delete buttons. 
+   * 
+   * @param event - input event 
+   * @param control - current form control
+   * 
+   * @public
+   */
+  onBeforeInputChange(event: InputEvent, control: AbstractControl): void {
+    // unify delete buttons to clean up inputs no matter
+    // at which position cursor is currently in
+    switch (event.inputType) {
+      case InputEventType.DELETE_CONTENT_BACKWARD:
+      case InputEventType.DELETE_CONTENT_FORWARD:
+        control.setValue('', { emitEvent: false });
+        break;
+    }
+
+    if (!event.data) return;
+
+    // handle control validity restriction base on type
+    switch (this.type) {
+      case OneTimePasswordType.TEXT:
+        if (!this._isTextValue(event.data)) event.preventDefault();
+        break;
+      case OneTimePasswordType.NUMBER:
+        if (!this._isNumericValue(event.data)) event.preventDefault();
+        break;
+    }
   }
 
   /**
@@ -342,7 +376,7 @@ export class NgOneTimePasswordComponent
     // set otp value from clipboard
     if (value?.length) {
       // prevent text paste into numeric field
-      if (this.type === OneTimePasswordType.NUMBER && !/[0-9]+/g.test(value)) return;
+      if (this.type === OneTimePasswordType.NUMBER && !this._isNumericValue(value)) return;
       this._setValue(value);
     }
 
@@ -369,6 +403,31 @@ export class NgOneTimePasswordComponent
     if (value) {
       this._updateControls(value);
     }
+  }
+
+  
+  /**
+   * Is Numeric Value.
+   * 
+   * Method used to validate provided control value for only numeric chars.
+   * 
+   * @param value  - control input value
+   * @returns 
+   */
+   private _isNumericValue(value: string): boolean {
+    return /[0-9]+/.test(value);
+  }
+
+  /**
+   * Is Text Value.
+   * 
+   * Method used to validate provided control value for text characters.
+   * 
+   * @param value - control input value
+   * @returns 
+   */
+  private _isTextValue(value: string) {
+    return /[^\s]+/.test(value);
   }
 
   /**

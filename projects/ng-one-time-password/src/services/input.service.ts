@@ -73,6 +73,8 @@ export class InputService {
     // on delete value - previous sibling should be focused
     switch (event.inputType) {
       case InputEventType.INSERT_TEXT:
+        //TODO: CHECK TEST CASES
+        if (!event.target.value) return;
         return this.focusInput(event.target.nextSibling);
       case InputEventType.DELETE_CONTENT_BACKWARD:
         return this.focusInput(event.target.previousSibling);
