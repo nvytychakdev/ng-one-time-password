@@ -7,7 +7,7 @@
 To install the package simply run:
 
 ```
-npm i ng-one-time-password --save
+npm i @nvytychakdev/ng-one-time-password --save
 ```
 
 Add `NgOneTimePasswordModule` to your app:
