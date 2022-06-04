@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  InputEventType,
-  OneTimePasswordType,
-} from '@ng-one-time-password/models';
+import { InputEventType } from '@ng-one-time-password/models';
 
 /**
  * Input Service.
@@ -63,7 +60,7 @@ export class InputService {
    *
    * @public
    */
-  handleInputChange(event: Event, type: OneTimePasswordType): void {
+  handleInputChange(event: Event): void {
     if (
       !(event instanceof InputEvent) ||
       !(event.target instanceof HTMLInputElement)
@@ -76,17 +73,6 @@ export class InputService {
     // on delete value - previous sibling should be focused
     switch (event.inputType) {
       case InputEventType.INSERT_TEXT:
-        // validate target input with numeric value
-        // in case if string value is provided - value should be cleared completely
-        if (
-          type === OneTimePasswordType.NUMBER &&
-          !/[0-9]/.test(event.target.value)
-        ) {
-          event.target.value = '';
-          event.preventDefault();
-          event.stopPropagation();
-          return;
-        }
         return this.focusInput(event.target.nextSibling);
       case InputEventType.DELETE_CONTENT_BACKWARD:
         return this.focusInput(event.target.previousSibling);

@@ -1,8 +1,6 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
+  ChangeDetectionStrategy, Component,
   ElementRef,
   forwardRef,
   Input,
@@ -10,18 +8,18 @@ import {
   OnDestroy,
   OnInit,
   SimpleChanges,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { AbstractControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   InputType,
   OneTimePasswordType,
-  ValueControl,
+  ValueControl
 } from '@ng-one-time-password/models';
 import {
   InputService,
   KeyboardService,
-  OneTimePasswordService,
+  OneTimePasswordService
 } from '@ng-one-time-password/services';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -183,12 +181,13 @@ export class NgOneTimePasswordComponent
   /**
    * Input type.
    *
-   * Provide HTMLInputElement type based `masked` status of the component.
+   * Provide HTMLInputElement type based on `masked` status of the component.
    *
    * @public
    */
   get inputType(): InputType {
-    return this.masked ? InputType.PASSWORD : InputType.TEXT
+    const type = this.type === OneTimePasswordType.NUMBER ? InputType.NUMBER : InputType.TEXT;
+    return this.masked ? InputType.PASSWORD : type;
   }
 
   /**
@@ -292,6 +291,7 @@ export class NgOneTimePasswordComponent
    */
   onInputFocus(event: FocusEvent): void {
     if (!event?.target) return;
+    if (event.target instanceof HTMLInputElement && !event.target?.value) return;
     this._input.selectInput(event.target);
   }
 
@@ -308,7 +308,7 @@ export class NgOneTimePasswordComponent
    * @param event - keyboard event
    */
   onInputKeyDown(event: KeyboardEvent): void {
-    this._keyboard.handleKeyPress(event);
+    this._keyboard.handleKeyPress(event, this.type);
   }
 
   /**
@@ -316,18 +316,13 @@ export class NgOneTimePasswordComponent
    *
    * Once input gets changed - input handler will be executed.
    * This event used to provide validate input based on `type` and provide proper one-time-password interaction behavior.
-   *
-   * In case if user tried to type text value into `'number'` input `type` - input change is going to be prevented, so only numeric values is accepted.
-   * Afterwards, once input received text changes - for text insertion input focus is going to be shifted to the next one in the line if accessible.
-   * For text removal - behavior is going to be reverted, so the previous input is going to be focused.
-   *
-   *
+   * 
    * @param event - input event
    *
    * @public
    */
   onInputChange(event: Event): void {
-    this._input.handleInputChange(event, this.type);
+    this._input.handleInputChange(event);
   }
 
   /**
@@ -414,7 +409,7 @@ export class NgOneTimePasswordComponent
         .pipe(takeUntil(this._$destroy))
         .subscribe((controlsValue) => {
           const value = Object.values(controlsValue).join('').trim();
-          this._onValueChange(value);
+          this._setValue(value);
         });
     }
   }
@@ -449,7 +444,7 @@ export class NgOneTimePasswordComponent
    */
   private _updateControls(value: string): void {
     this.controls?.forEach((control, index) => {
-      control.setValue(value[index]);
+      control.setValue(value[index], { onlySelf: true, emitEvent: false, });
     });
   }
 }
