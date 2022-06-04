@@ -79,10 +79,6 @@ export class NgOneTimePasswordComponent
    * <ng-one-time-password passwordType="text"></ng-one-time-password>
    * 
    * @example 
-   * // Hidden password input:
-   * <ng-one-time-password passwordType="password"></ng-one-time-password>
-   * 
-   * @example 
    * // Only numeric password allowed:
    * <ng-one-time-password passwordType="number"></ng-one-time-password>
    * 
@@ -97,21 +93,60 @@ export class NgOneTimePasswordComponent
    * Used to set document focus for first otp input once form control is available.
    * Might be helpful on page load to focus input right away. 
    * 
+   * @example 
+   * // Masked input:
+   * <ng-one-time-password [focusOnInit]="true"></ng-one-time-password>
+   * 
    * @default false
    * @public 
    */
   @Input() focusOnInit = false;
 
   /**
-   * One-Time-Password hidden password input.
+   * One-Time-Password masked password input.
    * 
    * Used to set document focus for first otp input once form control is available.
    * Might be helpful on page load to focus input right away. 
+   * 
+   * @example 
+   * // Masked input:
+   * <ng-one-time-password [masked]="true"></ng-one-time-password>
    * 
    * @default false
    * @public 
    */
   @Input() masked = false;
+
+  /**
+   * One-Time-Password wrapper CSS class.
+   * 
+   * Used to define custom CSS class for inputs wrapper of the One-Time-Password component.
+   * Might be helpful for defining custom styles from outside of the component.
+   * 
+   * @example 
+   * // Masked input:
+   * <ng-one-time-password wrapperClass="custom-css-class"></ng-one-time-password>
+   * 
+   * @default ''
+   * @public 
+   */
+
+  @Input() wrapperClass: string | string[] = '';
+
+  /**
+   * One-Time-Password inputs CSS class.
+   * 
+   * Used to define custom CSS class for all inputs of the One-Time-Password component.
+   * Might be helpful for defining custom styles from outside of the component.
+   * 
+   * @example 
+   * // Masked input:
+   * <ng-one-time-password inputClass="custom-css-class"></ng-one-time-password>
+   * 
+   * @default ''
+   * @public 
+   */
+  @Input() inputClass: string = '';
 
   /**
    * One-Time-Password control wrapper.
@@ -207,12 +242,12 @@ export class NgOneTimePasswordComponent
    * @public
    */
   ngOnChanges(changes: SimpleChanges): void {
-    const pwdLength = changes['length'];
+    const passwordLength = changes['length'];
 
     if (
-      pwdLength?.currentValue &&
-      pwdLength.currentValue !== pwdLength?.previousValue &&
-      !pwdLength.firstChange
+      passwordLength?.currentValue &&
+      passwordLength.currentValue !== passwordLength?.previousValue &&
+      !passwordLength.firstChange
     ) {
       this._setupControls();
     }
@@ -272,7 +307,7 @@ export class NgOneTimePasswordComponent
    *
    * @param event - keyboard event
    */
-  onKeyDown(event: KeyboardEvent): void {
+  onInputKeyDown(event: KeyboardEvent): void {
     this._keyboard.handleKeyPress(event);
   }
 
@@ -306,9 +341,8 @@ export class NgOneTimePasswordComponent
    * @public
    */
   onInputPaste(event: ClipboardEvent): void {
-    event.preventDefault();
-
     const value = event.clipboardData?.getData('text');
+    event.preventDefault();
 
     // set otp value from clipboard
     if (value?.length) {
