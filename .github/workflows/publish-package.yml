@@ -1,7 +1,7 @@
 name: Publish package to GitHub Packages
 on:
   push:
-    tag:
+    tags:
       - v*
 jobs:
   build:
