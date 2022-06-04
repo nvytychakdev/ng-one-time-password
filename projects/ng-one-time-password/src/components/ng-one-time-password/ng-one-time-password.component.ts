@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
+  InputType,
   OneTimePasswordType,
   ValueControl,
 } from '@ng-one-time-password/models';
@@ -102,6 +103,17 @@ export class NgOneTimePasswordComponent
   @Input() focusOnInit = false;
 
   /**
+   * One-Time-Password hidden password input.
+   * 
+   * Used to set document focus for first otp input once form control is available.
+   * Might be helpful on page load to focus input right away. 
+   * 
+   * @default false
+   * @public 
+   */
+  @Input() masked = false;
+
+  /**
    * One-Time-Password control wrapper.
    * 
    * Used to access DOM elements within the form control.
@@ -136,18 +148,12 @@ export class NgOneTimePasswordComponent
   /**
    * Input type.
    *
-   * Provide HTMLInputElement type based on One-Time-Password type selection.
+   * Provide HTMLInputElement type based `masked` status of the component.
    *
    * @public
    */
-  get inputType(): OneTimePasswordType {
-    switch (this.type) {
-      case OneTimePasswordType.PASSWORD:
-        return OneTimePasswordType.PASSWORD;
-
-      default:
-        return OneTimePasswordType.TEXT;
-    }
+  get inputType(): InputType {
+    return this.masked ? InputType.PASSWORD : InputType.TEXT
   }
 
   /**

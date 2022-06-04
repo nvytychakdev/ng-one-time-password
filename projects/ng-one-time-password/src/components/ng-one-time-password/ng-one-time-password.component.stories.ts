@@ -21,7 +21,16 @@ export default {
     }),
     componentWrapperDecorator(
       (story) =>
-        `<div style="height: 200px; width: 100%; display: flex; justify-content: center; align-items: center;">${story}</div>`
+        `<div 
+          style="
+            height: 200px; 
+            width: 100%; 
+            display: flex; 
+            justify-content: 
+            center; align-items: center;
+          ">
+            ${story}
+          </div>`
     ),
   ],
   argTypes: {
@@ -55,6 +64,9 @@ export default {
     ngOnChanges: {
       control: false,
     },
+    ngAfterViewInit: {
+      control: false,
+    },
     _updateControls: {
       control: false,
     },
@@ -82,21 +94,35 @@ export default {
     onTouched: {
       control: false,
     },
+    controlsWrapper: {
+      control: false,
+    },
     length: {
       control: {
         type: 'number',
       },
     },
+    masked: {
+      control: {
+        type: 'boolean',
+      },
+    },
     type: {
       control: {
         type: 'select',
-        options: ['text', 'number', 'password'],
+        options: ['text', 'number'],
       },
     },
   },
   parameters: {
     controls: {
-      exclude: ['_$destroy', 'controlsGroup', 'onChange', 'onTouched'],
+      exclude: [
+        '_$destroy',
+        'controlsGroup',
+        'onChange',
+        'onTouched',
+        'controlsWrapper',
+      ],
     },
     backgrounds: {
       default: 'light',
