@@ -1,27 +1,48 @@
 # NgOneTimePassword
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.7.
+## Installation
 
-## Development server
+To install the package simply run:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```
+npm i ng-one-time-password --save
+```
 
-## Code scaffolding
+Add `NgOneTimePasswordModule` to your app:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```
+import { NgOneTimePasswordModule } from 'ng-one-time-password';
 
-## Build
+@NgModule({
+  imports: [BrowserModule, FormsModule, NgOneTimePasswordModule],
+})
+export class AppModule {}
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Usage
 
-## Running unit tests
+Now we can import our component into the template. As it has form control support, there are two options to do so.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Simple `[(ngModel)]` way:
 
-## Running end-to-end tests
+```
+<ng-one-time-password
+  [(ngModel)]="value"
+  (ngModelChange)="onValueChange($event)"
+></ng-one-time-password>
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Or use angular reactive form control API:
 
-## Further help
+```
+<ng-one-time-password
+  formControlName="otp-control"
+></ng-one-time-password>
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## API
+
+| Name   |        Type         | Required | Default |                                   Description |
+| ------ | :-----------------: | -------: | ------: | --------------------------------------------: |
+| length |       number        |    false |       6 |             Defines one time password length. |
+| type   | OneTimePasswordType |    false |  'text' | Defines input type for the one time password. |
