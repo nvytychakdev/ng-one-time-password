@@ -101,7 +101,15 @@ export class NgOneTimePasswordComponent
    */
   @Input() focusOnInit = false;
 
-  @ViewChild('controlsWrapper', { static: false }) controlsWrapper!: ElementRef;
+  /**
+   * One-Time-Password control wrapper.
+   * 
+   * Used to access DOM elements within the form control.
+   * 
+   * @default null
+   * @publuc
+   */
+  @ViewChild('controlsWrapper', { static: false }) controlsWrapper: ElementRef | null = null;
 
   /**
    * Form controls group.
