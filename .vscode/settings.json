@@ -1,6 +1,0 @@
-{
-  "editor.formatOnSave": true,
-  "explorer.fileNesting.enabled": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "explorer.fileNesting.expand": true
-}
