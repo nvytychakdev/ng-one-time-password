@@ -46,7 +46,10 @@ Or use angular reactive form control API:
 
 ## API
 
-| Name   |        Type         | Required | Default |                                   Description |
-| ------ | :-----------------: | -------: | ------: | --------------------------------------------: |
-| length |       number        |    false |       6 |             Defines one time password length. |
-| type   | OneTimePasswordType |    false |  'text' | Defines input type for the one time password. |
+| Name           | Type                | Required | Default | Description                                                                                |
+| -------------- | :------------------ | :------: | :-----: | ------------------------------------------------------------------------------------------ |
+| `length`       | number              |  false   |    6    | Defines one time password length.                                                          |
+| `type`         | OneTimePasswordType |  false   | 'text'  | Defines input type for the one time password.                                              |
+| `inputClass`   | string              |  false   |   ''    | Defines custom CSS class for all inputs.                                                   |
+| `wrapperClass` | string / string[]   |  false   |   ''    | Defines custom CSS class for inputs wrapper.                                               |
+| `masked`       | boolean             |  false   |  false  | Defines masked state of the password. Once `true` all inputs will be replaced with starts. |

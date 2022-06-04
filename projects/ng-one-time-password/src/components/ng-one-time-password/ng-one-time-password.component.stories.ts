@@ -43,7 +43,7 @@ export default {
     writeValue: {
       control: false,
     },
-    onKeyDown: {
+    onInputKeyDown: {
       control: false,
     },
     onInputPaste: {

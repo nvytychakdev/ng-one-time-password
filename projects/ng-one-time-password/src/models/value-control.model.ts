@@ -18,7 +18,7 @@ export type CustomOnTouched = () => void;
  *
  * @example
  * ```
- * \@Component({
+ * /@Component({
  *      providers: [
  *        {
  *          provide: NG_VALUE_ACCESSOR,
@@ -29,6 +29,7 @@ export type CustomOnTouched = () => void;
  * })
  * export class MyComponent extends ValueControl<string> {}
  * ```
+ *
  *
  * @class
  */
