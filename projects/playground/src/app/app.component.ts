@@ -8,7 +8,7 @@ import { OneTimePasswordType } from '@ng-one-time-password/models';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  control = new FormControl();
+  control = new FormControl('');
   pwdLength = 6;
   pwdType = OneTimePasswordType.TEXT;
   isMasked = false;

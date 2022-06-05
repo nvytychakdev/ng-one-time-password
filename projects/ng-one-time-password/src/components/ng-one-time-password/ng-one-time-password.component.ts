@@ -10,10 +10,11 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { AbstractControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   InputEventType,
   InputType,
+  OneTimePasswordGroup,
   OneTimePasswordType,
   ValueControl
 } from '@ng-one-time-password/models';
@@ -164,7 +165,7 @@ export class NgOneTimePasswordComponent
    *
    * @public
    */
-  controlsGroup = new FormGroup({});
+  controlsGroup = new FormGroup<OneTimePasswordGroup>({});
 
   /**
    * Form controls.
@@ -174,7 +175,7 @@ export class NgOneTimePasswordComponent
    *
    * @public
    */
-  get controls(): AbstractControl[] {
+  get controls(): FormControl<string>[] {
     return Object.values(this.controlsGroup.controls);
   }
 
@@ -322,7 +323,7 @@ export class NgOneTimePasswordComponent
    * 
    * @public
    */
-  onBeforeInputChange(event: InputEvent, control: AbstractControl): void {
+  onBeforeInputChange(event: InputEvent, control: FormControl): void {
     // unify delete buttons to clean up inputs no matter
     // at which position cursor is currently in
     switch (event.inputType) {
