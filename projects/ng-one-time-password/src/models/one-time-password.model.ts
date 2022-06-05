@@ -1,3 +1,5 @@
+import { FormControl } from '@angular/forms';
+
 /**
  * One-Time-Password Type.
  *
@@ -10,4 +12,11 @@
 export enum OneTimePasswordType {
   TEXT = 'text',
   NUMBER = 'number',
+}
+
+/**
+ * One Time Password Form Controls Group
+ */
+export interface OneTimePasswordGroup {
+  [key: string]: FormControl<string>;
 }

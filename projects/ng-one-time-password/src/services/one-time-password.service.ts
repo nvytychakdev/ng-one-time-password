@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { OneTimePasswordGroup } from '@ng-one-time-password/models';
 
 /**
  * One-Time-Password Service.
@@ -24,7 +25,7 @@ export class OneTimePasswordService {
    */
   generateFormGroup(length: number): FormGroup {
     // get controls list
-    const controls = [...Array(Number(length))].map(() => new FormControl());
+    const controls = [...Array(Number(length))].map(() => new FormControl(''));
 
     // build group from controls
     // assign `'control-' + index` control name
@@ -33,6 +34,6 @@ export class OneTimePasswordService {
       {}
     );
 
-    return new FormGroup(group);
+    return new FormGroup<OneTimePasswordGroup>(group);
   }
 }
