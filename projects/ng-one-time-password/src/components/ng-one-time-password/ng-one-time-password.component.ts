@@ -10,12 +10,10 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import { FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormArray, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   InputEventType,
-  InputType,
-  OneTimePasswordGroup,
-  OneTimePasswordType,
+  InputType, OneTimePasswordType,
   ValueControl
 } from '@ng-one-time-password/models';
 import {
@@ -158,26 +156,14 @@ export class NgOneTimePasswordComponent
   @ViewChild('controlsWrapper', { static: false }) controlsWrapper: ElementRef | null = null;
 
   /**
-   * Form controls group.
+   * Form controls list.
    *
    * Contains list of FormControl inputs for each segment of One-Time-Password code.
-   * Control group used to track any controls changes to aggregate all inputs into the single emitted value of the component.
+   * Control array used to track any controls changes to aggregate all inputs into the single emitted value of the component.
    *
    * @public
    */
-  controlsGroup = new FormGroup<OneTimePasswordGroup>({});
-
-  /**
-   * Form controls.
-   *
-   * Get an array of input controls for the One-Time-Password component.
-   * Used to render list of the inputs, and also during value aggregation.
-   *
-   * @public
-   */
-  get controls(): FormControl<string>[] {
-    return Object.values(this.controlsGroup.controls);
-  }
+  controlsList = new FormArray<FormControl<string>>([]);
 
   /**
    * Input type.
@@ -291,6 +277,7 @@ export class NgOneTimePasswordComponent
    */
   onInputFocus(event: FocusEvent): void {
     if (!event?.target) return;
+    // prevent select method for mobiles if input does not have any value
     if (event.target instanceof HTMLInputElement && !event.target?.value) return;
     this._input.selectInput(event.target);
   }
@@ -401,12 +388,10 @@ export class NgOneTimePasswordComponent
    */
   override writeValue(value: string): void {
     super.writeValue(value);
-    if (value) {
-      this._updateControls(value);
-    }
+    if (value) this._updateControls(value);
   }
 
-  
+
   /**
    * Is Numeric Value.
    * 
@@ -415,7 +400,7 @@ export class NgOneTimePasswordComponent
    * @param value  - control input value
    * @returns 
    */
-   private _isNumericValue(value: string): boolean {
+  private _isNumericValue(value: string): boolean {
     return /[0-9]+/.test(value);
   }
 
@@ -462,10 +447,10 @@ export class NgOneTimePasswordComponent
 
     if (this.length > 0) {
       // get form group based on otp length
-      this.controlsGroup = this._otp.generateFormGroup(this.length);
+      this.controlsList = this._otp.generateControls(this.length);
 
       // handle form group value changes
-      this.controlsGroup.valueChanges
+      this.controlsList.valueChanges
         .pipe(takeUntil(this._$destroy))
         .subscribe((controlsValue) => {
           const value = Object.values(controlsValue).join('').trim();
@@ -485,10 +470,7 @@ export class NgOneTimePasswordComponent
    * @private
    */
   private _setValue(value?: string): void {
-    if (value) {
-      this._updateControls(value);
-    }
-
+    if (value) this._updateControls(value);
     this._onValueChange(value);
   }
 
@@ -497,13 +479,15 @@ export class NgOneTimePasswordComponent
    *
    * Method used to set controls list value. Each control will get own value assigned based on
    * the char index of the `value` string.
-   *
+   * 
    * @param value - one-time-password value
    *
    * @private
    */
   private _updateControls(value: string): void {
-    this.controls?.forEach((control, index) => {
+    this.controlsList.controls.forEach((control, index) => {
+      // use onlySelf and falsy emitEvent to prevent circular events
+      // as this method usually executed during control array changes
       control.setValue(value[index], { onlySelf: true, emitEvent: false, });
     });
   }
