@@ -229,6 +229,7 @@ export class NgOneTimePasswordComponent
    */
   ngOnInit(): void {
     this._setupControls();
+    this._updateControlsState(this.disabled)
   }
 
   /**
@@ -244,6 +245,7 @@ export class NgOneTimePasswordComponent
    */
   ngOnChanges(changes: SimpleChanges): void {
     const passwordLength = changes['length'];
+    const disabled = changes['disabled'];
 
     if (
       passwordLength?.currentValue &&
@@ -251,6 +253,10 @@ export class NgOneTimePasswordComponent
       !passwordLength.firstChange
     ) {
       this._setupControls();
+    }
+
+    if (disabled.currentValue !== disabled.previousValue && !disabled.firstChange) {
+      this._updateControlsState(!!disabled.currentValue);
     }
   }
 
@@ -405,6 +411,19 @@ export class NgOneTimePasswordComponent
   override writeValue(value: string): void {
     super.writeValue(value);
     if (value) this._updateControls(value);
+  }
+
+  override setDisabledState(isDisabled: boolean): void {
+    super.setDisabledState(isDisabled);
+    this._updateControlsState(isDisabled);
+  }
+
+  private _updateControlsState(isDisabled: boolean): void {
+    if (isDisabled) {
+      return this.controlsList.disable();
+    } 
+    
+    return this.controlsList.enable();
   }
 
   /**
