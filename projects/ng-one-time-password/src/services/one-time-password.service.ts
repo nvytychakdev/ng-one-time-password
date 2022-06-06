@@ -27,4 +27,32 @@ export class OneTimePasswordService {
     );
     return new FormArray(controls);
   }
+
+  /**
+   * Is Numeric Value.
+   *
+   * Method used to validate provided control value for only numeric chars.
+   *
+   * @param value  - control input value
+   * @returns is value a proper numeric string
+   *
+   * @public
+   */
+  isNumericValue(value: string): boolean {
+    return /[0-9]+/.test(value);
+  }
+
+  /**
+   * Is Text Value.
+   *
+   * Method used to validate provided control value for text characters.
+   *
+   * @param value - control input value
+   * @returns is value a proper text string
+   *
+   * @public
+   */
+  isTextValue(value: string): boolean {
+    return /[^\s]+/.test(value);
+  }
 }

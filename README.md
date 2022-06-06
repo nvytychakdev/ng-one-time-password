@@ -53,4 +53,5 @@ Or use angular reactive form control API:
 | `inputClass`   | string              |  false   |   ''    | Defines custom CSS class for all inputs.                                                   |
 | `wrapperClass` | string / string[]   |  false   |   ''    | Defines custom CSS class for inputs wrapper.                                               |
 | `masked`       | boolean             |  false   |  false  | Defines masked state of the password. Once `true` all inputs will be replaced with starts. |
+| `disabled`     | boolean             |  false   |  false  | Defines disabled state of the inputs for OTP. Can be provided with form control API.       |
 | `focusOnInit`  | boolean             |  false   |  false  | Defines if OTP control should be focused on component init.                                |

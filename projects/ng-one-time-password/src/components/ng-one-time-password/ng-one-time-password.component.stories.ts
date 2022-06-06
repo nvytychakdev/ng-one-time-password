@@ -85,9 +85,6 @@ export default {
     _$destroy: {
       control: false,
     },
-    controlsGroup: {
-      control: false,
-    },
     onChange: {
       control: false,
     },
@@ -95,6 +92,12 @@ export default {
       control: false,
     },
     controlsWrapper: {
+      control: false,
+    },
+    onBeforeInputChange: {
+      control: false,
+    },
+    setDisabledState: {
       control: false,
     },
     length: {
@@ -118,7 +121,7 @@ export default {
     controls: {
       exclude: [
         '_$destroy',
-        'controlsGroup',
+        'controlsList',
         'onChange',
         'onTouched',
         'controlsWrapper',
