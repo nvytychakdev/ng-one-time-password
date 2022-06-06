@@ -22,7 +22,7 @@ export class InputService {
    * @public
    */
   focusInput(sibling: EventTarget | ChildNode | null): void {
-    if (sibling instanceof HTMLInputElement) {
+    if (this.isInputElement(sibling)) {
       return sibling.focus();
     }
   }
@@ -38,9 +38,25 @@ export class InputService {
    * @public
    */
   selectInput(sibling: EventTarget | ChildNode | null): void {
-    if (sibling instanceof HTMLInputElement) {
+    if (this.isInputElement(sibling)) {
       return sibling.select();
     }
+  }
+
+  /**
+   * Is Input.
+   *
+   * Checks if provided `element` is actually `HTMLInputElement`.
+   *
+   * @param element - any HTML element
+   * @returns is html element is input
+   *
+   * @public
+   */
+  isInputElement(
+    element: EventTarget | ChildNode | HTMLElement | Element | null
+  ): element is HTMLInputElement {
+    return !!element && element instanceof HTMLInputElement;
   }
 
   /**
@@ -61,10 +77,7 @@ export class InputService {
    * @public
    */
   handleInputChange(event: Event): void {
-    if (
-      !(event instanceof InputEvent) ||
-      !(event.target instanceof HTMLInputElement)
-    ) {
+    if (!(event instanceof InputEvent) || !this.isInputElement(event.target)) {
       return;
     }
 

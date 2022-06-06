@@ -118,7 +118,7 @@ export default {
     controls: {
       exclude: [
         '_$destroy',
-        'controlsGroup',
+        'controlsList',
         'onChange',
         'onTouched',
         'controlsWrapper',

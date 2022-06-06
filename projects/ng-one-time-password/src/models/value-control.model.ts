@@ -35,6 +35,11 @@ export type CustomOnTouched = () => void;
  */
 export class ValueControl<T> implements ControlValueAccessor {
   /**
+   * Form control disabled state.
+   */
+  disabled = false;
+
+  /**
    * Form control value.
    *
    * @protected
@@ -70,6 +75,19 @@ export class ValueControl<T> implements ControlValueAccessor {
    */
   writeValue(value: T): void {
     this.value = value;
+  }
+
+  /**
+   * Set Disabled State.
+   *
+   * Provide disabled state from angular form control API to the component itself.
+   *
+   * @param isDisabled - is form control disabled
+   *
+   * @public
+   */
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
   /**

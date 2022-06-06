@@ -146,6 +146,22 @@ export class NgOneTimePasswordComponent
   @Input() inputClass: string = '';
 
   /**
+   * One-Time-Password disabled input.
+   * 
+   * Used to define disabled state of an OTP input. Used to provide read-only code, 
+   * or prevent user entering code before certain condition met.
+   * 
+   * @example 
+   * // Disable input by template:
+   * <ng-one-time-password [disabled]="true"></ng-one-time-password>
+   * 
+   * @example 
+   * // Disable input by form control:
+   * new FormControl({ value: '', disabled: true })
+   */
+  @Input() override disabled = false;
+
+  /**
    * One-Time-Password control wrapper.
    * 
    * Used to access DOM elements within the form control.
@@ -278,7 +294,7 @@ export class NgOneTimePasswordComponent
   onInputFocus(event: FocusEvent): void {
     if (!event?.target) return;
     // prevent select method for mobiles if input does not have any value
-    if (event.target instanceof HTMLInputElement && !event.target?.value) return;
+    if (this._input.isInputElement(event.target) && !event.target?.value) return;
     this._input.selectInput(event.target);
   }
 
@@ -325,10 +341,10 @@ export class NgOneTimePasswordComponent
     // handle control validity restriction base on type
     switch (this.type) {
       case OneTimePasswordType.TEXT:
-        if (!this._isTextValue(event.data)) event.preventDefault();
+        if (!this._otp.isTextValue(event.data)) event.preventDefault();
         break;
       case OneTimePasswordType.NUMBER:
-        if (!this._isNumericValue(event.data)) event.preventDefault();
+        if (!this._otp.isNumericValue(event.data)) event.preventDefault();
         break;
     }
   }
@@ -364,7 +380,7 @@ export class NgOneTimePasswordComponent
     // set otp value from clipboard
     if (value?.length) {
       // prevent text paste into numeric field
-      if (this.type === OneTimePasswordType.NUMBER && !this._isNumericValue(value)) return;
+      if (this.type === OneTimePasswordType.NUMBER && !this._otp.isNumericValue(value)) return;
       this._setValue(value);
     }
 
@@ -389,31 +405,6 @@ export class NgOneTimePasswordComponent
   override writeValue(value: string): void {
     super.writeValue(value);
     if (value) this._updateControls(value);
-  }
-
-
-  /**
-   * Is Numeric Value.
-   * 
-   * Method used to validate provided control value for only numeric chars.
-   * 
-   * @param value  - control input value
-   * @returns 
-   */
-  private _isNumericValue(value: string): boolean {
-    return /[0-9]+/.test(value);
-  }
-
-  /**
-   * Is Text Value.
-   * 
-   * Method used to validate provided control value for text characters.
-   * 
-   * @param value - control input value
-   * @returns 
-   */
-  private _isTextValue(value: string) {
-    return /[^\s]+/.test(value);
   }
 
   /**
