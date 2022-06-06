@@ -244,13 +244,13 @@ export class NgOneTimePasswordComponent
    * @public
    */
   ngOnChanges(changes: SimpleChanges): void {
-    const passwordLength = changes['length'];
+    const length = changes['length'];
     const disabled = changes['disabled'];
 
     if (
-      passwordLength?.currentValue &&
-      passwordLength.currentValue !== passwordLength?.previousValue &&
-      !passwordLength.firstChange
+      length?.currentValue &&
+      length.currentValue !== length?.previousValue &&
+      !length.firstChange
     ) {
       this._setupControls();
     }
