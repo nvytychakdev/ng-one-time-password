@@ -26,8 +26,8 @@ export default {
             height: 200px; 
             width: 100%; 
             display: flex; 
-            justify-content: 
-            center; align-items: center;
+            justify-content: center; 
+            align-items: center;
           ">
             ${story}
           </div>`
